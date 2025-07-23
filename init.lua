@@ -161,6 +161,7 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 vim.opt.conceallevel = 2
+vim.opt.spell = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -364,6 +365,7 @@ require("lazy").setup({
 	--
 	-- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+  { require("custom.plugins.cmp_dictionary")},
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
@@ -480,6 +482,7 @@ require("lazy").setup({
 				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
+      build = 'cargo build --release'
 		},
 	},
 	{
@@ -489,16 +492,16 @@ require("lazy").setup({
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			-- Mason must be loaded before its dependents so we need to set it up here.
 			-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-			{ "williamboman/mason.nvim", opts = {} },
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
+			--{ "williamboman/mason.nvim", opts = {} },
+			--"williamboman/mason-lspconfig.nvim",
+			--"WhoIsSethDaniel/mason-tool-installer.nvim",
 
 			-- Useful status updates for LSP.
 			{ "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
-			"uga-rosa/cmp-dictionary",
+			--"uga-rosa/cmp-dictionary",
 			"hrsh7th/cmp-buffer",
 		},
 		config = function()
@@ -700,6 +703,7 @@ require("lazy").setup({
 				-- gopls = {},
 				-- pyright = {},
 				-- rust_analyzer = {},
+        markdown_oxide = { "markdown_oxide"},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
 				-- Some languages (like typescript) have entire language plugins that can be useful:
@@ -723,13 +727,6 @@ require("lazy").setup({
 						},
 					},
 				},
-				require("cmp_dictionary").setup({
-					paths = {
-						"/usr/share/dict/words",
-						"~/.local/share/harper-ls/file_dictionaries/home%aidanw%neorg%MoG%the_return_2.md%",
-					},
-					exact_length = 2,
-				}),
 				require("cmp_path"),
 			}
 
@@ -748,7 +745,7 @@ require("lazy").setup({
 			-- for you, so that they are available from within Neovim.
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
+				--"stylua", -- Used to format Lua code
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -917,15 +914,16 @@ require("lazy").setup({
 				}),
 				sources = {
 					{
-						name = "lazydev",
+						--name = "lazydev",
 						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
 						group_index = 0,
 					},
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
-					{ name = "nvim_lsp_signature_help" },
+					--{ name = "nvim_lsp_signature_help" },
 					{ name = "dictionary" },
+          { name = "buffer" },
 				},
 			})
 		end,
@@ -949,7 +947,7 @@ require("lazy").setup({
 			-- Load the colorscheme here.
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-storm")
+			vim.cmd.colorscheme("retrobox")
 		end,
 	},
 
@@ -1005,21 +1003,14 @@ require("lazy").setup({
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
 			ensure_installed = {
-				"bash",
-				"c",
 				"diff",
-				"html",
 				"lua",
 				"luadoc",
 				"markdown",
 				"markdown_inline",
-				"query",
-				"vim",
-				"vimdoc",
-				"norg",
 			},
 			-- Autoinstall languages that are not installed
-			auto_install = true,
+			auto_install = false,
 			highlight = {
 				enable = true,
 				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
