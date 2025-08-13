@@ -1,20 +1,33 @@
 return {
 	"saghen/blink.cmp",
-	dependencies = { "archie-judd/blink-cmp-words" },
-	build = 'cargo build --release',
-	version = '1.*',
+	dependencies = {
+		"archie-judd/blink-cmp-words",
+		"MahanRahmati/blink-nerdfont.nvim",
+		"erooke/blink-cmp-latex",
+		"ribru17/blink-cmp-spell",
+	},
+	build = "cargo build --release",
+	version = "1.*",
 
 	opts = {
 		fuzzy = { implementation = "prefer_rust" },
 		-- ...
 		-- Optionally add 'dictionary', or 'thesaurus' to default sources
 
-    keymap = { preset = 'enter'},
-    appearance = {
-        nerd_font_variant = 'normal',
-      },
+		keymap = {
+			preset = "default",
+			["<S-Space>"] = { "show", "show_documentation", "hide_documentation" },
+			["<Tab>"] = { "select_next", "fallback" },
+			["<S-Tab>"] = { "select_prev", "fallback" },
+			["<C-n>"] = { "scroll_documentation_down", "fallback" },
+			["<C-e>"] = { "scroll_documentation_down", "fallback" },
+			--["<CR>"] = { "select_and_accept" },
+		},
+		appearance = {
+			nerd_font_variant = "normal",
+		},
 		sources = {
-			default = { "lsp", "path", "dictionary" },
+			default = { "lsp", "path", "dictionary", "nerdfont" },
 			providers = {
 
 				-- Use the thesaurus source
@@ -23,7 +36,7 @@ return {
 					module = "blink-cmp-words.thesaurus",
 					-- All available options
 					opts = {
-						-- A score offset applied to returned items. 
+						-- A score offset applied to returned items.
 						-- By default the highest score is 0 (item 1 has a score of -1, item 2 of -2 etc..).
 						score_offset = 0,
 
@@ -40,9 +53,9 @@ return {
 					module = "blink-cmp-words.dictionary",
 					-- All available options
 					opts = {
-						-- The number of characters required to trigger completion. 
+						-- The number of characters required to trigger completion.
 						-- Set this higher if completion is slow, 3 is default.
-						dictionary_search_threshold = 3,
+						dictionary_search_threshold = 2,
 
 						-- See above
 						score_offset = 0,
@@ -51,13 +64,19 @@ return {
 						pointer_symbols = { "!", "&", "^" },
 					},
 				},
+				nerdfont = {
+					module = "blink-nerdfont",
+					name = "Nerd Fonts",
+					score_offset = 15,
+					opts = { insert = true },
+				},
 			},
 
 			-- Setup completion by filetype
 			per_filetype = {
 				text = { "dictionary" },
 				markdown = { "thesaurus", "dictionary" },
-				vimwiki = { "dictionary", "omni" },
+				vimwiki = { "dictionary", "omni", "thesaurus", "nerdfont" },
 			},
 		},
 		-- ...

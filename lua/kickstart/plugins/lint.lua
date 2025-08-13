@@ -23,7 +23,7 @@ return {
 				rst = { "vale" },
 				ruby = { "ruby" },
 				terraform = { "tflint" },
-				text = { "vale", "misspell" },
+				text = { "vale", },
 				vimwiki = { "vale" },
 			}
 			-- You can disable the default linters by setting their filetypes to nil:
